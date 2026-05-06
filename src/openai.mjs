@@ -18,6 +18,7 @@ export default {
       const auth = request.headers.get("Authorization");
       let allowAuthKey = process.env.AUTH_KEY;
       let authKey = auth?.split(" ")[1];
+      console.log(`authKey: ${authKey}, allowAuthKey: ${allowAuthKey}`);
       if (!(allowAuthKey && authKey && authKey === allowAuthKey)) {
         throw new HttpError("Authentication failed!", 400);
       }
