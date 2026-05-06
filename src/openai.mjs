@@ -16,7 +16,12 @@ export default {
     };
     try {
       const auth = request.headers.get("Authorization");
-      let apiKey = auth?.split(" ")[1];
+      let allowAuthKey = process.env.AUTH_KEY;
+      let authKey = auth?.split(" ")[1];
+      if (!(allowAuthKey && authKey && authKey === allowAuthKey)) {
+        throw new HttpError("Authentication failed!", 400);
+      }
+      let apiKey = process.env.API_KEYS;
       if (apiKey && apiKey.includes(',')) {
         const apiKeys = apiKey.split(',').map(k => k.trim()).filter(k => k);
         apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
