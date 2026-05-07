@@ -24,12 +24,14 @@ export default {
       if (!(allowAuthKey && authKey && authKey === allowAuthKey)) {
         throw new HttpError("Authentication failed!", 400);
       }
-      let apiKey = process.env.API_KEYS;
-      if (apiKey && apiKey.includes(',')) {
-        const apiKeys = apiKey.split(',').map(k => k.trim()).filter(k => k);
-        apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
-        console.log(`OpenAI Selected API Key: ${apiKey}`);
-      }
+      // let apiKey = process.env.API_KEYS;
+      // if (apiKey && apiKey.includes(',')) {
+      //   const apiKeys = apiKey.split(',').map(k => k.trim()).filter(k => k);
+      //   apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
+      //   console.log(`OpenAI Selected API Key: ${apiKey}`);
+      // }
+      const apiKey = getRandomApiKey();
+      console.log(`OpenAI Selected API Key: ${apiKey}`);
       const assert = (success) => {
         if (!success) {
           throw new HttpError("The specified HTTP method is not allowed for the requested resource", 400);
@@ -57,6 +59,15 @@ export default {
     }
   }
 };
+
+const API_KEYS = (process.env.API_KEYS || "")
+  .split(",")
+  .map(k => k.trim())
+  .filter(Boolean);
+
+function getRandomApiKey() {
+  return API_KEYS[Math.floor(Math.random() * API_KEYS.length)];
+}
 
 class HttpError extends Error {
   constructor(message, status) {
