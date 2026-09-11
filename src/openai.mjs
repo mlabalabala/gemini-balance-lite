@@ -57,7 +57,8 @@ export default {
     } catch (err) {
       return errHandler(err);
     }
-  }
+  },
+  getRandomApiKey
 };
 
 const API_KEYS = (process.env.API_KEYS || "")
